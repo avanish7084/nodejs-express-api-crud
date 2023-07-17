@@ -19,7 +19,7 @@ app.get("/",(req,res)=>{
 
 app.get("/api/students",async(req,res)=>{
 
-    await fs.readFile('jsndata/data.json',  'utf8', (err,data) => {
+    await fs.readFile('data.json',  'utf8', (err,data) => {
         if (err) {
             console.error('Error writing JSON file:', err);
             return;
@@ -40,7 +40,7 @@ app.post('/api/students', (req, res) => {
     // console.log("-------------------------")
     console.log(req.body);
 
-    fs.writeFile('jsndata/data.json', JSON.stringify(req.body), 'utf8', (err) => {
+    fs.writeFile('data.json', JSON.stringify(req.body), 'utf8', (err) => {
     if (err) {
         console.error('Error writing JSON file:', err);
         return;
