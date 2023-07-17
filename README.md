@@ -42,7 +42,7 @@ npm install
 Once the installation is complete and the project is set up, follow these instructions to run the local API:
 
 ```
-npm start
+node index.js
 ```
 
 By default, the server will be running at `http://localhost:3000`.
