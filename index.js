@@ -17,7 +17,7 @@ app.get("/",(req,res)=>{
     res.send("Hello, Now I am live")
 })
 
-app.get("/service",async(req,res)=>{
+app.get("/api/students",async(req,res)=>{
 
     await fs.readFile('jsndata/data.json',  'utf8', (err,data) => {
         if (err) {
@@ -30,12 +30,12 @@ app.get("/service",async(req,res)=>{
 })
 })
 
-// app.post("/service",(req,res)=>{
+// app.post("/api/students",(req,res)=>{
 //     console.log("HTTP post request received");
 // })
 
 
-app.post('/service', (req, res) => {
+app.post('/api/students', (req, res) => {
     const body = req.body;
     // console.log("-------------------------")
     console.log(req.body);
