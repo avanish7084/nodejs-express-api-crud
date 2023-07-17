@@ -52,10 +52,8 @@ By default, the server will be running at `http://localhost:3000`.
 The following endpoints are available for performing CRUD operations:
 
 - **GET /api/students**: Retrieve all resources.
-- **GET /api/students:id**: Retrieve a specific resource by ID.
+- **GET /api/students**: Retrieve a specific resource by ID.
 - **POST /api/students**: Create a new resource.
-- **PUT /api/students/:id**: Update an existing resource by ID.
-- **DELETE /api/students/:id**: Delete a resource by ID.
 
 
 ## Technologies Used
