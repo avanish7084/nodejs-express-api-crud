@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "json-server": "^0.17.3",
+    "mongoose": "^7.3.4"
+  },
+  "name": "apii",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abss",
+  "license": "ISC",
+  "description": "API course",
+  "engines": {
+    "node": "18.16.1"
+  }
+}
