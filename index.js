@@ -10,7 +10,7 @@ app.use(express.json())
 const port=3000;
 
 app.listen(port,()=>{
-    console.log("Hi Hi");
+    console.log("Working");
 })
 
 app.get("/",(req,res)=>{
