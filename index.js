@@ -10,7 +10,11 @@ app.use(express.json())
 const port=3000;
 
 app.listen(port,()=>{
+<<<<<<< HEAD
     console.log("Server is running on http://localhost:${port}");
+=======
+    console.log("Working");
+>>>>>>> d876fa32b1f53f6a3474c3858e2f8e0590a0aa5f
 })
 
 app.get("/",(req,res)=>{

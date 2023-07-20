@@ -7,17 +7,29 @@ app.use(express.json())
 
 
 const mongoose=require("mongoose")
-mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.10.1',{
-    useNewUrlParser:true,
-    useUnifiedTopology:true
-})
-.then(()=>{
-    console.log("connected"); 
+// mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.10.1',{
+//     useNewUrlParser:true,
+//     useUnifiedTopology:true
+// })
+// .then(()=>{
+//     console.log("connected"); 
 
-})
-.catch((err)=>{
-    console.log("connected to mongodb",err);
-})
+// })
+// .catch((err)=>{
+//     console.log("connected to mongodb",err);
+// })
+
+const MongoDBConnection = require('./MongoDBConnection');
+
+async function main() {
+  const dbConnection = new MongoDBConnection();
+  await dbConnection.connect();
+
+  // Close the connection when done
+  
+}
+
+main().catch((error) => console.error('Error in main:', error));
 
 
 const port =3000;
