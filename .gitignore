@@ -3,6 +3,8 @@ node_modules/
 
 data.json
 
+student.js
+
 # Ignore logs
 *.log
 
