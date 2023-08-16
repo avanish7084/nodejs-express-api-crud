@@ -1,8 +1,9 @@
 const mongoose=require("mongoose")
 class MongoDBConnection {
   constructor() {
+
     // Update the connection string and database name with your actual MongoDB settings
-    this.connectionString = 'mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.10.1';
+    this.connectionString = 'mongodb+srv://avanishdubeyofficail561:QprbsytJ13cdChpr@cluster1.8njtl6e.mongodb.net/';
     
     this.client = null;
   }
@@ -41,6 +42,5 @@ module.exports = MongoDBConnection;
 //   module.exports = db;
 
 // }
-
 
 

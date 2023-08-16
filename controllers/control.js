@@ -1,16 +1,40 @@
 
-const {monmodel} = require("../models/model");
+const { log } = require("handlebars")
+const Controlfunc=require("../Models/db")
+const accessControlfunc=new Controlfunc()
 
-
-
-const fta = async (req, res) => {
+const checkWorking = async (req, res) => {
     res.json({ message: "Api is working..." })
 }
 
 const fetch = async (req, res) => {
     try {
-        const allDocuments = await monmodel.find({});
-        res.json(allDocuments);
+        const allDocuments = await accessControlfunc.fetchAll()
+        // /res.json(allDocuments);
+        res.render('userList',{allDocuments})
+
+    } catch (err) {
+        res.status(500).json({ error: 'Could not fetch data' });
+    }
+}
+
+const postForm = async (req, res) => {
+    try {
+        console.log("Hi");
+        // /res.json(allDocuments);
+        res.render('form',{})
+
+    } catch (err) {
+        res.status(500).json({ error: 'Could not fetch data' });
+    }
+}
+
+const updateForm=async (req, res) => {
+    try {
+        console.log("Hey update");
+         // /res.json(allDocuments);
+        res.render('updateForm',{})
+
     } catch (err) {
         res.status(500).json({ error: 'Could not fetch data' });
     }
@@ -18,8 +42,8 @@ const fetch = async (req, res) => {
 
 const fetchdata = async (req, res) => {
     try {
-        fetchid = req.params.id
-        const al = await monmodel.find({ id: fetchid });
+        fetchid = req.params.userId
+        const al = await accessControlfunc.fetdata(fetchid)
         res.json(al);
     } catch (err) {
         res.status(500).json({ error: 'Could not fetch data' });
@@ -28,29 +52,19 @@ const fetchdata = async (req, res) => {
 
 const postData = async (req, res) => {
     console.log("inside post function");
-
-    const data = new monmodel({
-        id: 1,
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email
-    })
-    const val = await data.save();
-
-    console.log(val);
-    res.json(val);
-
+    
+    res.json(await accessControlfunc.postd(req.body));
 
 }
 
-const updateData = async (req, res) => {
-    const uid = req.params.id;
-    let first_name = req.body.first_name;
-    let last_name = req.body.last_name;
-    let email = req.body.email
 
+const updateData = async (req, res) => {
+    let uid = req.params.userId;
+    let firstName = req.body.firstName;
+    let lastName = req.body.lastName;
+    let email = req.body.email
     try {
-        const updatedata = await monmodel.findOneAndUpdate({ id: uid }, { $set: { first_name: first_name, last_name: last_name, email: email } }, { new: true })
+        const updatedata = await accessControlfunc.updateid(uid,firstName,lastName,email)
         if (!updatedata) {
             return res.status(404).json({ message: 'updatedata not found' });
         }
@@ -65,15 +79,15 @@ const updateData = async (req, res) => {
 const updateMail = async (req, res) => {
 
     let emailid = req.body.email;
-    let first_name = req.body.first_name;
-    let last_name = req.body.last_name;
-    let idd = req.body.id;
+    let firstName = req.body.firstName;
+    let lastName = req.body.lastName;
+    let idd = req.body.userId;
 
-    console.log(emailid, first_name, last_name, idd);
+    console.log(emailid, firstName, lastName, idd);
 
 
     try {
-        const updatedmail = await monmodel.updateOne({ email: emailid }, { $set: { first_name: first_name, last_name: last_name, id: idd } }, { upsert: true })
+        const updatedmail = await accessControlfunc.updatem(emailid,firstName,lastName,idd)//await monmodel.updateOne({ email: emailid }, { $set: { firstName: firstName, lastName: lastName, id: idd } }, { upsert: true })
         return res.json(updatedmail);
 
     } catch (err) {
@@ -81,10 +95,25 @@ const updateMail = async (req, res) => {
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 
+}
 
+const deletedata=async (req, res) => {
+    let id = req.params.userId;
+    let firstName = req.body.firstName;
+    let lastName = req.body.lastName;
+    let email = req.body.email
+    try {
+        const datadelete = await accessControlfunc.deleteid(id,firstName,lastName,email)
+        if (!datadelete) {
+            return res.status(404).json({ message: 'deletedata not found' });
+        }
 
+        return res.json(datadelete);
+    } catch (err) {
+        console.error('Error deleting data:', err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
 }
 
 
-module.exports = { fta, fetch, fetchdata, postData, updateData, updateMail }
-
+module.exports = {updateForm,postForm,checkWorking, fetch, fetchdata, postData, updateData, updateMail,deletedata }

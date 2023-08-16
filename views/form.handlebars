@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<style>
+   
+    /* Apply styles to the registration form container */
+    #registrationForm {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style for input labels */
+    label {
+        font-weight: bold;
+    }
+
+    /* Style for text inputs */
+    input[type="text"],
+    input[type="email"] {
+        width: 100%;
+        padding: 8px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .buttons-container {
+        text-align: center;
+        margin-top: 10%;
+    }
+
+    /* Style for the buttons */
+    .form-button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 0 10px;
+    }
+
+    .form-button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Style for the submit button */
+        {
+            {
+            !-- #submitButton {
+                display: block;
+                margin: 0 auto;
+                background-color: #007bff;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            #submitButton:hover {
+                background-color: #0056b3;
+            }
+
+            --
+        }
+    }
+
+    /* Style for the status message */
+    #statusMessage {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+</style>
+
+<head>
+    <title>Registration Form</title>
+</head>
+
+<body>
+    <div id="registrationForm">
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" name="userId" required><br>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required><br>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+        <div class="buttons-container">
+            <input type="submit" class="form-button" id="submitButton" value="Submit">
+            <!-- Add an input for the document ID (hidden) -->
+            <input type="hidden" id="documentId" name="documentId">
+            
+        </div>
+
+        <div id="statusMessage"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const submitButton = document.getElementById('submitButton');
+
+            const statusMessage = document.getElementById('statusMessage');
+
+            // Store the ID of the document being edited
+            let editingDocumentId = null;
+
+            submitButton.addEventListener('click', async () => {
+
+                if (!document.getElementById('userId').value || !document.getElementById('firstName').value || !document.getElementById('lastName').value || !document.getElementById('email').value) {
+                    alert('Please fill out all required fields.');
+                    return;
+                }
+                // Create or update based on editingDocumentId
+                const data = {
+                    userId: document.getElementById('userId').value,
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value
+                };
+
+                try {
+                    let response;
+
+                    if (editingDocumentId) {
+                        // Update existing document
+                        response = await fetch(`/api/update/${editingDocumentId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                    } else {
+                        // Create new document
+                        response = await fetch('/api/post', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                    }
+
+                    if (response.ok) {
+                        alert('Data submitted successfully!');
+                        statusMessage.textContent = 'Data submitted successfully!';
+                        statusMessage.style.color = 'green';
+                        // Clear editing state after successful submission
+                        editingDocumentId = null;
+                    } else {
+                        const responseData = await response.json();
+                        const errorMessage = responseData.error || 'Failed to submit data.';
+                        console.error(errorMessage);
+                        statusMessage.textContent = 'Error: ' + errorMessage;
+                        statusMessage.style.color = 'red';
+                    }
+                } catch (error) {
+                    console.error('An error occurred:', error);
+                    statusMessage.textContent = 'An error occurred. Please try again later.';
+                    statusMessage.style.color = 'red';
+                }
+            });
+
+
+            // Assuming you have a button or trigger to initiate the update
+
+            
+        });
+
+    </script>
+</body>
+
+</html>
