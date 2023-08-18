@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+
 //mongodb+srv://avanishdubeyofficail561:QprbsytJ13cdChpr@cluster1.8njtl6e.mongodb.net/
 const MongoDBConnection = require('./MongoDBConnection');
 
@@ -15,7 +16,6 @@ const sch = {
     lastName: String,
     email: String
 }
-
 const monmodel = mongoose.model("Col2", sch);
 
 class Controlfunc {

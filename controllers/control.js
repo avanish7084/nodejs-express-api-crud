@@ -1,8 +1,15 @@
-
+const Joi = require('joi');
 const { log } = require("handlebars")
-const Controlfunc=require("../Models/db")
-const accessControlfunc=new Controlfunc()
+const Controlfunc = require("../Models/db")
+const accessControlfunc = new Controlfunc()
 
+
+const sch = Joi.object({
+    userId:Joi.number().min(100).max(2000).required(),
+    firstName: Joi.string().min(1).max(60).trim().required(),
+    lastName: Joi.string().min(1).max(60).trim().required(),
+    email: Joi.string().email().required()
+})
 const checkWorking = async (req, res) => {
     res.json({ message: "Api is working..." })
 }
@@ -11,7 +18,7 @@ const fetch = async (req, res) => {
     try {
         const allDocuments = await accessControlfunc.fetchAll()
         // /res.json(allDocuments);
-        res.render('userList',{allDocuments})
+        res.render('userList', { allDocuments })
 
     } catch (err) {
         res.status(500).json({ error: 'Could not fetch data' });
@@ -22,18 +29,18 @@ const postForm = async (req, res) => {
     try {
         console.log("Hi");
         // /res.json(allDocuments);
-        res.render('form',{})
+        res.render('form', {})
 
     } catch (err) {
         res.status(500).json({ error: 'Could not fetch data' });
     }
 }
 
-const updateForm=async (req, res) => {
+const updateForm = async (req, res) => {
     try {
         console.log("Hey update");
-         // /res.json(allDocuments);
-        res.render('updateForm',{})
+        // /res.json(allDocuments);
+        res.render('updateForm', {})
 
     } catch (err) {
         res.status(500).json({ error: 'Could not fetch data' });
@@ -51,8 +58,19 @@ const fetchdata = async (req, res) => {
 }
 
 const postData = async (req, res) => {
+    try {
+        let data = req.body;
+        const validationResult = sch.validate(data);
+
+        if (validationResult.error) {
+            return res.status(400).json({ error: validationResult.error.details[0].message });
+        }
+    }
+    catch (error) {
+        console.log(error)
+    }
     console.log("inside post function");
-    
+
     res.json(await accessControlfunc.postd(req.body));
 
 }
@@ -64,7 +82,7 @@ const updateData = async (req, res) => {
     let lastName = req.body.lastName;
     let email = req.body.email
     try {
-        const updatedata = await accessControlfunc.updateid(uid,firstName,lastName,email)
+        const updatedata = await accessControlfunc.updateid(uid, firstName, lastName, email)
         if (!updatedata) {
             return res.status(404).json({ message: 'updatedata not found' });
         }
@@ -87,7 +105,7 @@ const updateMail = async (req, res) => {
 
 
     try {
-        const updatedmail = await accessControlfunc.updatem(emailid,firstName,lastName,idd)//await monmodel.updateOne({ email: emailid }, { $set: { firstName: firstName, lastName: lastName, id: idd } }, { upsert: true })
+        const updatedmail = await accessControlfunc.updatem(emailid, firstName, lastName, idd)//await monmodel.updateOne({ email: emailid }, { $set: { firstName: firstName, lastName: lastName, id: idd } }, { upsert: true })
         return res.json(updatedmail);
 
     } catch (err) {
@@ -97,13 +115,13 @@ const updateMail = async (req, res) => {
 
 }
 
-const deletedata=async (req, res) => {
+const deletedata = async (req, res) => {
     let id = req.params.userId;
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
     let email = req.body.email
     try {
-        const datadelete = await accessControlfunc.deleteid(id,firstName,lastName,email)
+        const datadelete = await accessControlfunc.deleteid(id, firstName, lastName, email)
         if (!datadelete) {
             return res.status(404).json({ message: 'deletedata not found' });
         }
@@ -116,4 +134,4 @@ const deletedata=async (req, res) => {
 }
 
 
-module.exports = {updateForm,postForm,checkWorking, fetch, fetchdata, postData, updateData, updateMail,deletedata }
+module.exports = { updateForm, postForm, checkWorking, fetch, fetchdata, postData, updateData, updateMail, deletedata }
