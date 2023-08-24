@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f0f0f0;
+    }
+
+    .login-container {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-top: 10px;
+    }
+
+    input {
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 8px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    #error-message {
+        color: red;
+        text-align: center;
+        margin-top: 10px;
+    }
+</style>
+
+<head>
+    <title>Login</title>
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="login-form">
+            <label for="userId">User ID:</label>
+            <input type="text" id="userId" name="userId" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p id="error-message"></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.getElementById('login-form');
+            const errorMessage = document.getElementById('error-message');
+
+            loginForm.addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const userIdInput = document.getElementById('userId');
+                const passwordInput = document.getElementById('password');
+
+
+                userId = userIdInput.value
+                password = passwordInput.value
+                try {
+                    const response = await fetch('/api/checkData', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ userId: userId, password }),
+
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        const token = data.token;
+                        //alert(`tokenis ${token}`)
+            
+                        // Set the cookie function
+                        function setCookie(name, value, daysToExpire) {
+                            const expires = 60 * 60 * 24 * 1;
+                            document.cookie = `${name}=${value};max-age=${expires};path=/`;
+                        }
+
+                       
+                        // Call the function to set the cookie
+                        setCookie("jwtToken", token, 1); 
+                        
+                        window.location.href=`/api/protect`
+
+                        console.log('Login successful!', token);
+                        errorMessage.textContent = 'Login successful!';
+                        errorMessage.style.color = 'green';
+                    } else {
+                        errorMessage.textContent = 'Invalid credentials. Please try again.';
+                        errorMessage.style.color = 'red';
+                    }
+                } catch (error) {
+
+                    console.error('Error:', error);
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>

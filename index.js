@@ -3,6 +3,7 @@ const { log } = require("console");
 const app=express()
 app.use(express.json())
 
+const jwt=require("jsonwebtoken")
 const exphbs = require('express-handlebars');
 const Handlebars = require('handlebars');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
@@ -16,6 +17,8 @@ app.set('view engine','handlebars')
 
 const data=require("./routes/router")
 app.use("/api",data)
+
+
 
 // // Rendering Static Files
 // const path=require("path")
@@ -33,5 +36,5 @@ app.use("/api",data)
 
 const port =5000;
 app.listen(port,()=>{
-    console.log("Server is running on port");
+    console.log(`Api up and running at: http://localhost:${port}`);
 })

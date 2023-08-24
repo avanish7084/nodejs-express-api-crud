@@ -1,6 +1,8 @@
 # Ignore node_modules directory
 node_modules/
 
+.env
+
 data.json
 
 student.js
