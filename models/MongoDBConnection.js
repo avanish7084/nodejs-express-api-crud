@@ -3,7 +3,7 @@ class MongoDBConnection {
   constructor() {
 
     // Update the connection string and database name with your actual MongoDB settings
-    this.connectionString = 'mongodb+srv://avanishdubeyofficail561:QprbsytJ13cdChpr@cluster1.8njtl6e.mongodb.net/';
+    this.connectionString = 'mongodb+srv://avanishdubeyofficail561:${process.env.Mongocloud_password}@cluster1.8njtl6e.mongodb.net/';
     
     this.client = null;
   }
